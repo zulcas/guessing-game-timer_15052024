@@ -10,7 +10,10 @@ const p = document.createElement('p');
 let previousGuesses = [];
 let numGuesses = 1;
 let playGame = true;
-let remainingTime = 30;
+let remainingTime = 5;
+let timerExecuting = setInterval(timer, 1000);
+
+
 
 if (playGame) {
   subt.addEventListener('click', function (e) {
@@ -79,6 +82,8 @@ function endGame() {
   startOver.appendChild(p);
   playGame = false;
   newGame();
+  clearInterval(timerExecuting);
+  
 }
 
 function newGame() {
@@ -94,7 +99,27 @@ function newGame() {
     userInput.removeAttribute('disabled');
     startOver.removeChild(p);
     playGame = true;
+    console.log(remainingTime);
+    remainingTime = 5;
+    let timerExecuting = setInterval(timer, 1000);
   })
+}
+
+function timer(){
+  document.querySelector("#timer").textContent = remainingTime;
+  remainingTime --;
+  stopTimer();
+}
+
+function stopTimer(){
+  if(numGuesses>10 || remainingTime<=0 || !playGame){
+    if(remainingTime==0){
+      displayMessage(`Time Over! Number was ${randomNumber}`);
+      document.querySelector("#timer").textContent = 0;
+      endGame()
+    }
+  }
+
 }
 //Allow to restart game with restart button
 //Change DIV to a form so it can accept the enter key
